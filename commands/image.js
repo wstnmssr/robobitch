@@ -1,12 +1,14 @@
+const { SlashCommandBuilder } = require('discord.js');
+const { MessageAttachment } = require('discord.js');
+const fs = require('fs');
+
 module.exports = {
-    name: 'image',
-    description: 'you get an image, what else?',
-    execute(message, args){
-        const fs = require('fs')
-        fs.readFile('./command_utils/images.txt', function(error, file){
-            if(error) throw error;
-            const lines= file.toString().split('\n');
-            message.channel.send(lines[Math.floor(Math.random()*lines.length)]);
-        })
+    data: new SlashCommandBuilder()
+        .setName('image')
+        .setDescription('you get an image, what else?'),
+    async execute(interaction){
+        const contents = fs.readFileSync('./command_utils/images.txt', 'utf-8');
+        const arr =  contents.split(/\r?\n/);
+        await interaction.reply(arr[Math.floor(Math.random()*arr.length)]);
     },
 };
